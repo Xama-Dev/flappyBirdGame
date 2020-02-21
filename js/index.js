@@ -31,7 +31,6 @@ function PairOfBarriers (heightDisplay, gap, axisX) {
     this.raffleGap = () => {
         const topHeight = Math.random() * (heightDisplay - gap)
         const bottomHeight = heightDisplay - gap - topHeight
-        console.log(topHeight,bottomHeight, gap)
 
         this.barrierTop.setHeight(topHeight)
         this.barrierBottom.setHeight(bottomHeight)
@@ -45,5 +44,40 @@ function PairOfBarriers (heightDisplay, gap, axisX) {
     this.setAxisX(axisX)
 }
 
-const b = new PairOfBarriers (700, 200, 200)
-document.querySelector('[wm-flappy]').appendChild(b.element)
+// const b = new PairOfBarriers (700, 200, 200)
+// document.querySelector('[wm-flappy]').appendChild(b.element)
+
+function Barriers (heightDisplay, widthDisplay, gap, spaceBetween, notifyScore) {
+    this.barriers = [
+        new PairOfBarriers (heightDisplay, gap, widthDisplay),
+        new PairOfBarriers (heightDisplay, gap, widthDisplay + spaceBetween),
+        new PairOfBarriers (heightDisplay, gap, widthDisplay + spaceBetween * 2),
+        new PairOfBarriers (heightDisplay, gap, widthDisplay + spaceBetween * 3),
+    ]
+
+    const displacement = 3
+
+    this.animate = () => {
+        this.barriers.forEach ( pair => {
+            pair.setAxisX (pair.getAxisX() - displacement)
+
+            if (pair.getAxisX() < -pair.getWidth()) {
+                pair.setAxisX(pair.getAxisX() + spaceBetween * this.barriers.length)
+                pair.raffleGap()
+            }
+
+            const middle = widthDisplay / 2
+            const crossedMiddle = pair.getAxisX() + displacement >= middle
+                && pair.getAxisX() < middle
+
+            crossedMiddle && notifyScore() 
+        })
+    }
+}
+
+const barriers = new Barriers (700, 1200, 200, 400)
+const gameArea = document.querySelector('[wm-flappy]')
+barriers.barriers.forEach( pair => gameArea.appendChild(pair.element))
+// setInterval(() => {
+//     barriers.animate()
+// }, 20)
