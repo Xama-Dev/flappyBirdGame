@@ -15,7 +15,7 @@ body {
     box-sizing: border-box;
     font-family: 'Oswald', sans-serif;
 }
-.conteudo {
+.content {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -30,13 +30,13 @@ body {
     background-color: deepskyblue;
     overflow: hidden;
 }
-.passaro {
+.bird {
     position: absolute;
     width: 60px;
     left: calc(50% - 30px);
     bottom: 50%;
 }
-.par-de-barreiras {
+.pair-of-barriers {
     position: absolute;
     top: 0;
     height: 100%;
@@ -44,25 +44,25 @@ body {
     flex-direction: column;
     justify-content: space-between;
 }
-.barreira {
+.barrier {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.barreira .borda {
+.barrier .barrier-border {
     height: 30px;
     width: 130px;
     background: linear-gradient(90deg, #639301, #a5e82e);
     border: 2px solid #000;
 }
-.barreira .corpo {
+.barrier .barrier-body {
     height: 150px;
     width: 110px;
     background: linear-gradient(90deg, #639301, #a5e82e);
     border-left: 2px solid #000;
     border-right: 2px solid #000;
 }
-.progresso {
+.game-progress {
     position: absolute;
     top: 10px;
     right: 10px;
