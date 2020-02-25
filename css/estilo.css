@@ -23,7 +23,6 @@ body {
 }
 [wm-flappy] {
     position: relative;
-    border: 5px solid dodgerblue;
     height: 700px;
     width: 1200px;
     margin: 15px;
@@ -67,4 +66,5 @@ body {
     right: 10px;
     font-family: Pixel;
     font-size: 70px;
+    z-index: 100;
 }
