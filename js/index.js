@@ -15,10 +15,6 @@ function Barrier (reverse = false) {
     this.setHeight = height => barrierBody.style.height = `${height}px`
 }
 
-// const b = new Barrier(true)
-// b.setHeight(300)
-// document.querySelector('[wm-flappy]').appendChild(b.element)
-
 function PairOfBarriers (heightDisplay, gap, axisX) {
     this.element = newElement ('div', 'pair-of-barriers')
 
@@ -43,9 +39,6 @@ function PairOfBarriers (heightDisplay, gap, axisX) {
     this.raffleGap()
     this.setAxisX(axisX)
 }
-
-// const b = new PairOfBarriers (700, 200, 200)
-// document.querySelector('[wm-flappy]').appendChild(b.element)
 
 function Barriers (heightDisplay, widthDisplay, gap, spaceBetween, notifyScore) {
     this.barriers = [
@@ -88,7 +81,7 @@ function Bird (heightDisplay) {
     window.onkeyup = e => flying = false
 
     this.animate = () => {
-        const newAxisY = this.getAxisY() + (flying ? 4 : -3)
+        const newAxisY = this.getAxisY() + (flying ? 4 : -4)
         const maxHeightFlying = heightDisplay - this.element.clientHeight
 
         if (newAxisY <= 0) {
@@ -104,7 +97,6 @@ function Bird (heightDisplay) {
     this.setAxisY(heightDisplay / 2)
 }
 
-
 function Progress () {    
     this.element = newElement ('span', 'game-progress')
     this.upDateScore = score => {
@@ -114,31 +106,83 @@ function Progress () {
     this.upDateScore(0)
 }
 
-// const gameArea = document.querySelector('[wm-flappy]')
-// const barriers = new Barriers (700, 1200, 200, 500)
-// const bird = new Bird (700)
+function overlap (elementA, elementB) {
+    const a = elementA.getBoundingClientRect()
+    const b = elementB.getBoundingClientRect()
 
-// gameArea.appendChild(bird.element)
-// gameArea.appendChild(new Progress().element)
-// barriers.barriers.forEach( pair => gameArea.appendChild(pair.element))
+    const horizontal = a.left + a.width >= b.left
+        && b.left + b.width >= a.left
+    const vertical = a.top + a.height >= b.top
+        && b.top + b.height >= a.top    
+    return horizontal && vertical
+}
 
-// setInterval(() => {
-//     barriers.animate()
-//     bird.animate()
-// }, 20)
+function collision (bird, barriers) {
+    let collided = false
+    barriers.barriers.forEach (pair => {
+        if (!collided) {
+            const barrierTop = pair.barrierTop.element
+            const barrierBottom = pair.barrierBottom.element 
+            collided = overlap (bird.element, barrierTop)
+                || overlap(bird.element, barrierBottom)
+        }
+    })
+    return collided
+}
+
+function gameOverDisplay (gameArea) {
+    const element = newElement ('p', 'game-over-display')
+
+    element.innerHTML = 'GAME OVER'
+
+    gameArea.appendChild(element)
+}
+
+function BoxInstructions () {
+    this.element = newElement('div', 'instructions')
+    this.button = newElement('button', 'instructions-button')
+    this.paragraph = newElement('p', 'instructions-paragraph button-no-active')
+
+    this.button.innerHTML = 'Instruções'
+    this.paragraph.innerHTML = '- Pressione qualquer tecla para subir' + 
+        '<br> <br>' + 
+        '- Solte a tecla para descer' +
+        '<br> <br>' +
+        '- Conduza o Bird entre as barreira para pontuar' +
+        '<br> <br>' +
+        '- Atualize a página para iniciar um novo jogo'
+    
+    this.element.appendChild(this.button)
+    this.element.appendChild(this.paragraph)
+
+    this.button.addEventListener('click', () => {
+        if (this.paragraph.classList.contains('button-no-active')) {
+            this.paragraph.classList.remove('button-no-active')
+            this.paragraph.classList.add('button-active')
+
+        } else if (this.paragraph.classList.contains('button-active')) {
+            this.paragraph.classList.remove('button-active')
+            this.paragraph.classList.add('button-no-active')
+        }
+
+    })
+}
 
 function Game () {
-    let score = 0
+    let score = 0   
 
+    const content = document.querySelector('.content')
     const gameArea = document.querySelector('[wm-flappy]') 
     const heightDisplay = gameArea.clientHeight
     const widthDisplay = gameArea.clientWidth
 
+    const boxInstruction = new BoxInstructions()
     const progress = new Progress()
     const barriers = new Barriers(heightDisplay, widthDisplay, 200, 500, 
         () => progress.upDateScore (++score))
     const bird = new Bird (heightDisplay)
 
+    content.appendChild(boxInstruction.element)
     gameArea.appendChild(progress.element)
     gameArea.appendChild(bird.element)
     barriers.barriers.forEach( pair => gameArea.appendChild(pair.element))
@@ -147,6 +191,13 @@ function Game () {
         const timer = setInterval(() => {
             barriers.animate()
             bird.animate()
+
+            if (collision(bird, barriers)) {
+                clearInterval(timer)
+
+                gameOverDisplay(gameArea)
+            }
+
         }, 20);
     }
 }
