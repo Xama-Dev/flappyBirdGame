@@ -1,5 +1,5 @@
-# flappyBirdGame
-###Jogo Flappy bird desenvolvido com manipulação de DOM.
+# Flappy Bird Game
+### Jogo Flappy bird desenvolvido com manipulação de DOM.
 
 Tecnologias usadas: 
 - HTML5
