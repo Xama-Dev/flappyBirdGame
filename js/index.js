@@ -81,7 +81,7 @@ function Bird (heightDisplay) {
     window.onkeyup = e => flying = false
 
     this.animate = () => {
-        const newAxisY = this.getAxisY() + (flying ? 4 : -4)
+        const newAxisY = this.getAxisY() + (flying ? 3 : -3)
         const maxHeightFlying = heightDisplay - this.element.clientHeight
 
         if (newAxisY <= 0) {
@@ -139,7 +139,8 @@ function gameOverDisplay (gameArea) {
 }
 
 function BoxInstructions () {
-    this.element = newElement('div', 'instructions')
+    const boxInstructions = document.querySelector('.instructions')
+    
     this.button = newElement('button', 'instructions-button')
     this.paragraph = newElement('p', 'instructions-paragraph button-no-active')
 
@@ -152,8 +153,8 @@ function BoxInstructions () {
         '<br> <br>' +
         '- Atualize a página para iniciar um novo jogo'
     
-    this.element.appendChild(this.button)
-    this.element.appendChild(this.paragraph)
+    boxInstructions.appendChild(this.button)
+    boxInstructions.appendChild(this.paragraph)
 
     this.button.addEventListener('click', () => {
         if (this.paragraph.classList.contains('button-no-active')) {
@@ -171,18 +172,16 @@ function BoxInstructions () {
 function Game () {
     let score = 0   
 
-    const content = document.querySelector('.content')
     const gameArea = document.querySelector('[wm-flappy]') 
     const heightDisplay = gameArea.clientHeight
     const widthDisplay = gameArea.clientWidth
 
     const boxInstruction = new BoxInstructions()
     const progress = new Progress()
-    const barriers = new Barriers(heightDisplay, widthDisplay, 200, 500, 
+    const barriers = new Barriers(heightDisplay, widthDisplay, 145, 370, 
         () => progress.upDateScore (++score))
     const bird = new Bird (heightDisplay)
 
-    content.appendChild(boxInstruction.element)
     gameArea.appendChild(progress.element)
     gameArea.appendChild(bird.element)
     barriers.barriers.forEach( pair => gameArea.appendChild(pair.element))
