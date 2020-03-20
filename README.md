@@ -7,3 +7,4 @@ Tecnologias usadas:
 - JavaScritp/EcmaScript 6: OOP, Clean code.
 - DOM
 
+Acesse: https://xama-dev.github.io/flappyBirdGame/
