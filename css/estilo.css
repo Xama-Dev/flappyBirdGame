@@ -17,9 +17,8 @@ body {
 }
 .content {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     min-height: 100%;
+    text-align: center;
 }
 .content h1 {
     margin-top: 70px;
@@ -91,14 +90,12 @@ body {
     z-index: 100;
 }
 .instructions {
-    position: absolute;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    left: 176px;
-    top: 145px;
+    align-items: center;    
     box-sizing: border-box;
     width: 320px;    
+    margin-top: 127px;
 }
 .instructions-button {
     box-sizing: border-box;
